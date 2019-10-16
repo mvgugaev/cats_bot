@@ -2,6 +2,8 @@
 
 # HTTP proxy url, uncomment if you need proxy
 BOT_PROXY_URL = 'http://146.185.192.26:3128'
+
+# It's wrong token :)
 BOT_API_TOKEN = '917789027:AAGAItCYFQNJPS7dbgPKW0ZwuVJIeKMzsR4'
 
 # Text blocks
