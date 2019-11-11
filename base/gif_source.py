@@ -4,6 +4,11 @@ import bs4
 import random
 import ujson
 import logging
+import linecache
+import sys
+
+sys.path.append('../')
+import config
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -13,8 +18,8 @@ logging.basicConfig(level=logging.INFO)
 CAATS_BASE_URL = 'https://cataas.com/cat/gif'
 RANDOM_CAT_GIFS_BASE_URL = 'https://randomcatgifs.com/'
 RAND_CAT_BASE_URL = 'https://rand.cat/gifs/'
-GIPHY_BASE_URL = 'https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=cat'
 THE_CATS_API_BASE_URL = 'https://api.thecatapi.com/v1/images/search?limit=1&mime_types=gif&order=Random&size=small&page=0&sub_id=demo-eb6a3'
+GIPHY_BASE_URL = 'http://api.giphy.com/v1/gifs/random?tag=cat&api_key=' + config.GIPHY_API_KEY
 
 
 # Random cat gif source class
@@ -35,6 +40,21 @@ class GifSource:
             return result
         except Exception as e:
             logging.info(str(e))
+
+    # Get random gifs urls from dump file
+    @staticmethod
+    def get_random_lines_from_file(count):
+
+        urls_list = []
+
+        with open('../data/urls_dump.txt') as f:
+            linecount = sum(1 for line in f)
+
+        for i in range(count):
+            print(linecache.getline('../data/urls_dump.txt', random.randint(0, linecount)))
+            urls_list.append(linecache.getline('../data/urls_dump.txt', random.randint(0, linecount)))
+
+        return urls_list
 
     # asynchronous load content from url
     @staticmethod
@@ -77,3 +97,7 @@ class GifSource:
         parse_json = ujson.loads(response)
 
         return parse_json[0]['url']
+
+
+if __name__ == '__main__':
+    GifSource.get_random_lines_from_file(1)

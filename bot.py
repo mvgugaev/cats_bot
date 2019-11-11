@@ -1,5 +1,6 @@
 import logging
 import config
+import time
 from base.gif_source import GifSource
 from base.data import UserStorage
 from base.reply import BotReplyKeyboards
@@ -24,6 +25,13 @@ text_render_keyboard = BotReplyKeyboards.text_render_reply()
 async def send_welcome(message: types.Message):
     await bot.send_message(chat_id=message.chat.id, text=config.WELCOME_TETX, reply_markup=default_keyboard)
 
+
+async def send_cats(message, count):
+     if storage.data_get(message.from_user.id, 'use_file_cash') == '01' and storage.data_get(message.from_user.id, 'use_file_cash_time') + 60 < time.time():
+        for url in GifSource.get_random_lines_from_file(count):
+            await message.answer_document(document=url, reply_markup=default_keyboard)
+
+     else
 
 # 5 cats handler
 @dp.message_handler(lambda message: message.text == '5 котиков')
